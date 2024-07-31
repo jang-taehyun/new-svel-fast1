@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from domain.answer import answer_router
 from domain.question import question_router
+from fastapi.responses import PlainTextResponse
 
 app = FastAPI()
 
@@ -20,3 +21,7 @@ app.add_middleware(
 
 app.include_router(question_router.router)
 app.include_router(answer_router.router)
+
+@app.get("/health")
+async def health_check():
+    return PlainTextResponse("건강합니다",status_code=200)
