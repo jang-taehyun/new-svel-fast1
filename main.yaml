@@ -1,0 +1,23 @@
+name: fast CI/CD
+
+on:                         # 언제 action을 동작시킬지
+  push:                     # push가 됐을 때 동작시키겠다.
+    branches: [master]      # 대상 branch
+    paths-ignore:           # push 이벤트가 발생해도 무시할 파일
+    - '.gitignore'
+    - '.dockerignore'
+
+# github-action이 동작하는 환경 및 동작하는 부분
+jobs:
+  ci:
+    runs-on: ubuntu-latest  # github-action이 동작하는 환경
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # 가장 최근 commit의 히스토리만 가져옴.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
